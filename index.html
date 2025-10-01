@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projeto PROCCORP - Registro de Testes Físicos</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7f8;
+      margin: 0;
+      padding: 0 20px 40px;
+      color: #333;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #004d40;
+      margin-bottom: 10px;
+    }
+    header {
+      background-color: #00796b;
+      color: white;
+      padding: 20px 10px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    header p {
+      text-align: center;
+      font-style: italic;
+      margin-top: 5px;
+      font-size: 1rem;
+      color: #b2dfdb;
+    }
+    form {
+      background: white;
+      max-width: 900px;
+      margin: 0 auto 40px;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    form > div {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #004d40;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    .modalities-select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #b2dfdb;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    .modalities-select:focus {
+      border-color: #00796b;
+      outline: none;
+    }
+    .modalities-select {
+      height: 100px;
+    }
+    .inline-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .inline-group > div {
+      flex: 1 1 150px;
+    }
+    button {
+      background-color: #00796b;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      font-weight: 700;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+    button:hover {
+      background-color: #004d40;
+    }
+    table {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.9rem;
+    }
+    th {
+      background-color: #00796b;
+      color: white;
+      font-weight: 700;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .performance-fraco {
+      background-color: #f8d7da;
+      color: #721c24;
+      font-weight: 600;
+    }
+    .performance-razoavel {
+      background-color: #fff3cd;
+      color: #856404;
+      font-weight: 600;
+    }
+    .performance-bom {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      font-weight: 600;
+    }
+    .performance-mbom {
+      background-color: #c3e6cb;
+      color: #155724;
+      font-weight: 600;
+    }
+    .performance-excelencia {
+      background-color: #b2dfdb;
+      color: #004d40;
+      font-weight: 700;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    @media (max-width: 600px) {
+      .inline-group {
+        flex-direction: column;
+      }
+      form {
+        padding: 15px 15px;
+      }
+      table, th, td {
+        font-size: 0.8rem;
+      }
+    }
+    #sortControls {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #filterBy {
+      padding: 8px 10px;
+      border: 1.5px solid #b2dfdb;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <p style="text-align: center; font-size: 1.2rem; margin-bottom: 20px;">feito por Junior Giachini : )</p>
+
+  <header>
+    <h1>Projeto PROCCORP - IFPR</h1>
+    <p>Seleção de atletas para o JIFPR 2025 - Registro de Testes Físicos</p>
+  </header>
+
+  <form id="studentForm">
+    <h2>Cadastro do Aluno e Resultados dos Testes</h2>
+    <div class="inline-group">
+      <div>
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div>
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required />
+      </div>
+      <div>
+        <label for="sex">Sexo:</label>
+        <select id="sex" name="sex" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+        </select>
+      </div>
+      <div>
+        <label for="age">Idade:</label>
+        <input type="number" id="age" name="age" min="6" max="17" required />
+      </div>
+    </div>
+    <div>
+      <label for="modalities">Modalidades esportivas (segure Ctrl para múltiplas):</label>
+      <select id="modalities" name="modalities" multiple class="modalities-select" required>
+        <option value="volei masculino">Volei Masculino</option>
+        <option value="volei feminino">Volei Feminino</option>
+        <option value="volei de praia masculino">Volei de Praia Masculino</option>
+        <option value="volei de praia feminino">Volei de Praia Feminino</option>
+        <option value="futsal">Futsal</option>
+        <option value="basquete">Basquete</option>
+        <option value="tenis de mesa masculino">Tenis de Mesa Masculino</option>
+        <option value="tenis de mesa feminino">Tenis de Mesa Feminino</option>
+      </select>
+    </div>
+
+    <h3>Resultados dos Testes</h3>
+    <div class="inline-group">
+      <div>
+        <label for="teste1">Teste 1 - Aptidão cardiorrespiratória: corrida/caminhada de 6min (m):</label>
+        <input type="number" step="0.1" id="teste1" name="teste1" required />
+      </div>
+      <div>
+        <label for="teste2">Teste 2 - Velocidade: corrida de 20 metros (segundos):</label>
+        <input type="number" step="0.01" id="teste2" name="teste2" required />
+      </div>
+      <div>
+        <label for="teste3">Teste 3 - Potência membros superiores: arremesso de medicine ball (cm):</label>
+        <input type="number" step="0.1" id="teste3" name="teste3" required />
+      </div>
+      <div>
+        <label for="teste4">Teste 4 - Potência membros inferiores: salto horizontal (cm):</label>
+        <input type="number" step="0.1" id="teste4" name="teste4" required />
+      </div>
+      <div>
+        <label for="teste5">Teste 5 - Agilidade: quadrado 4x4 metros (segundos):</label>
+        <input type="number" step="0.01" id="teste5" name="teste5" required />
+      </div>
+      <div>
+        <label for="teste6">Teste 6 - Flexibilidade: sentar e alcanar (cm):</label>
+        <input type="number" step="0.1" id="teste6" name="teste6" required />
+      </div>
+      <div>
+        <label for="teste7">Teste 7 - Resistência muscular localizada: abdominais em 1min (repetições):</label>
+        <input type="number" step="1" id="teste7" name="teste7" required />
+      </div>
+    </div>
+
+    <button type="submit">Registrar Aluno</button>
+  </form>
+
+  <section>
+    <h2>Lista de Alunos e Resultados</h2>
+    <div id="sortControls">
+      <label for="filterBy">Filtrar por Modalidade:</label>
+      <select id="filterBy">
+        <option value="all" selected>Todas</option>
+        <option value="volei masculino">Volei Masculino</option>
+        <option value="volei feminino">Volei Feminino</option>
+        <option value="volei de praia masculino">Volei de Praia Masculino</option>
+        <option value="volei de praia feminino">Volei de Praia Feminino</option>
+        <option value="futsal">Futsal</option>
+        <option value="basquete">Basquete</option>
+        <option value="tenis de mesa masculino">Tenis de Mesa Masculino</option>
+        <option value="tenis de mesa feminino">Tenis de Mesa Feminino</option>
+      </select>
+    </div>
+    <table id="studentsTable" aria-label="Lista de alunos e resultados">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>ID</th>
+          <th>Sexo</th>
+          <th>Idade</th>
+          <th>Modalidades</th>
+          <th>Teste 1</th>
+          <th>Classificação 1</th>
+          <th>Teste 2</th>
+          <th>Classificação 2</th>
+          <th>Teste 3</th>
+          <th>Classificação 3</th>
+          <th>Teste 4</th>
+          <th>Classificação 4</th>
+          <th>Teste 5</th>
+          <th>Classificação 5</th>
+          <th>Teste 6</th>
+          <th>Classificação 6</th>
+          <th>Teste 7</th>
+          <th>Classificação 7</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Students will be added here -->
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>Projeto PROCCORP - IFPR - Seleção JIFPR 2025</p>
+  </footer>
+
+  <script>
+    // Helper functions for classification
+    function classifyHigherBetter(value, ranges) {
+      if (value < ranges.fraco) return 'fraco';
+      if (value >= ranges.razoavel[0] && value <= ranges.razoavel[1]) return 'razoavel';
+      if (value >= ranges.bom[0] && value <= ranges.bom[1]) return 'bom';
+      if (value >= ranges.mbom[0] && value <= ranges.mbom[1]) return 'm-bom';
+      if (value >= ranges.excelencia) return 'excelencia';
+      return 'fraco';
+    }
+    function classifyLowerBetter(value, ranges) {
+      if (value > ranges.fraco) return 'fraco';
+      if (value >= ranges.razoavel[0] && value <= ranges.razoavel[1]) return 'razoavel';
+      if (value >= ranges.bom[0] && value <= ranges.bom[1]) return 'bom';
+      if (value >= ranges.mbom[0] && value <= ranges.mbom[1]) return 'm-bom';
+      if (value <= ranges.excelencia) return 'excelencia';
+      return 'fraco';
+    }
+
+    // Classification tables for each test by sex and age
+    // Test 1: Aptidão cardiorrespiratória (m) - higher better
+    const test1Table = {
+      M: {
+        6: { fraco: 730, razoavel: [730, 826], bom: [827, 956], mbom: [956, 1316], excelencia: 1317 },
+        7: { fraco: 752, razoavel: [752, 848], bom: [849, 975], mbom: [975, 1302], excelencia: 1303 },
+        8: { fraco: 774, razoavel: [774, 870], bom: [871, 995], mbom: [995, 1300], excelencia: 1301 },
+        9: { fraco: 797, razoavel: [797, 894], bom: [895, 1018], mbom: [1018, 1309], excelencia: 1310 },
+        10: { fraco: 817, razoavel: [817, 916], bom: [917, 1040], mbom: [1040, 1322], excelencia: 1323 },
+        11: { fraco: 837, razoavel: [837, 938], bom: [939, 1062], mbom: [1062, 1338], excelencia: 1339 },
+        12: { fraco: 860, razoavel: [860, 964], bom: [965, 1090], mbom: [1090, 1366], excelencia: 1367 },
+        13: { fraco: 895, razoavel: [895, 1004], bom: [1005, 1136], mbom: [1136, 1421], excelencia: 1422 },
+        14: { fraco: 939, razoavel: [939, 1057], bom: [1058, 1197], mbom: [1197, 1498], excelencia: 1499 },
+        15: { fraco: 986, razoavel: [986, 1112], bom: [1113, 1262], mbom: [1262, 1584], excelencia: 1585 },
+        16: { fraco: 1015, razoavel: [1015, 1148], bom: [1149, 1306], mbom: [1306, 1643], excelencia: 1644 },
+        17: { fraco: 1038, razoavel: [1038, 1176], bom: [1177, 1341], mbom: [1341, 1691], excelencia: 1692 },
+      },
+      F: {
+        6: { fraco: 672, razoavel: [672, 767], bom: [768, 900], mbom: [901, 1276], excelencia: 1277 },
+        7: { fraco: 691, razoavel: [691, 779], bom: [780, 891], mbom: [892, 1158], excelencia: 1159 },
+        8: { fraco: 707, razoavel: [707, 791], bom: [792, 895], mbom: [896, 1131], excelencia: 1132 },
+        9: { fraco: 720, razoavel: [720, 805], bom: [806, 910], mbom: [911, 1148], excelencia: 1149 },
+        10: { fraco: 729, razoavel: [729, 818], bom: [819, 931], mbom: [932, 1199], excelencia: 1200 },
+        11: { fraco: 736, razoavel: [736, 831], bom: [832, 953], mbom: [954, 1250], excelencia: 1251 },
+        12: { fraco: 743, razoavel: [743, 835], bom: [836, 947], mbom: [948, 1191], excelencia: 1192 },
+        13: { fraco: 749, razoavel: [749, 839], bom: [840, 947], mbom: [948, 1178], excelencia: 1179 },
+        14: { fraco: 751, razoavel: [751, 847], bom: [848, 969], mbom: [970, 1256], excelencia: 1257 },
+        15: { fraco: 748, razoavel: [748, 858], bom: [859, 1005], mbom: [1006, 1390], excelencia: 1391 },
+        16: { fraco: 746, razoavel: [746, 865], bom: [866, 1021], mbom: [1022, 1401], excelencia: 1402 },
+        17: { fraco: 744, razoavel: [744, 870], bom: [871, 1027], mbom: [1028, 1389], excelencia: 1390 },
+      }
+    };
+
+    // Test 2: Velocidade (20m sprint) - seconds (lower better)
+    const test2Table = {
+      M: {
+        6: { excelencia: 3.61, mbom: [3.62, 4.21], bom: [4.22, 4.57], razoavel: [4.58, 4.94], fraco: 4.94 },
+        7: { excelencia: 3.52, mbom: [3.53, 4.08], bom: [4.09, 4.42], razoavel: [4.43, 4.75], fraco: 4.75 },
+        8: { excelencia: 3.44, mbom: [3.45, 3.97], bom: [3.98, 4.28], razoavel: [4.29, 4.59], fraco: 4.59 },
+        9: { excelencia: 3.37, mbom: [3.38, 3.86], bom: [3.87, 4.15], razoavel: [4.16, 4.44], fraco: 4.44 },
+        10: { excelencia: 3.30, mbom: [3.31, 3.76], bom: [3.77, 4.03], razoavel: [4.04, 4.30], fraco: 4.30 },
+        11: { excelencia: 3.22, mbom: [3.23, 3.65], bom: [3.66, 3.91], razoavel: [3.92, 4.16], fraco: 4.16 },
+        12: { excelencia: 3.14, mbom: [3.15, 3.56], bom: [3.57, 3.80], razoavel: [3.81, 4.04], fraco: 4.04 },
+        13: { excelencia: 3.04, mbom: [3.05, 3.44], bom: [3.45, 3.68], razoavel: [3.69, 3.91], fraco: 3.91 },
+        14: { excelencia: 2.92, mbom: [2.93, 3.30], bom: [3.31, 3.54], razoavel: [3.55, 3.78], fraco: 3.78 },
+        15: { excelencia: 2.78, mbom: [2.79, 3.16], bom: [3.17, 3.39], razoavel: [3.40, 3.63], fraco: 3.63 },
+        16: { excelencia: 2.68, mbom: [2.69, 3.05], bom: [3.06, 3.28], razoavel: [3.29, 3.53], fraco: 3.53 },
+        17: { excelencia: 2.58, mbom: [2.59, 2.95], bom: [2.96, 3.19], razoavel: [3.20, 3.43], fraco: 3.43 },
+      },
+      F: {
+        6: { excelencia: 3.98, mbom: [3.99, 4.56], bom: [4.57, 4.91], razoavel: [4.92, 5.27], fraco: 5.27 },
+        7: { excelencia: 3.84, mbom: [3.85, 4.39], bom: [4.40, 4.72], razoavel: [4.73, 5.05], fraco: 5.05 },
+        8: { excelencia: 3.72, mbom: [3.73, 4.23], bom: [4.24, 4.55], razoavel: [4.56, 4.86], fraco: 4.86 },
+        9: { excelencia: 3.60, mbom: [3.61, 4.09], bom: [4.10, 4.39], razoavel: [4.40, 4.68], fraco: 4.68 },
+        10: { excelencia: 3.50, mbom: [3.51, 3.97], bom: [3.98, 4.25], razoavel: [4.26, 4.53], fraco: 4.53 },
+        11: { excelencia: 3.41, mbom: [3.42, 3.86], bom: [3.87, 4.14], razoavel: [4.15, 4.41], fraco: 4.41 },
+        12: { excelencia: 3.34, mbom: [3.35, 3.79], bom: [3.80, 4.06], razoavel: [4.07, 4.33], fraco: 4.33 },
+        13: { excelencia: 3.27, mbom: [3.28, 3.73], bom: [3.74, 4.00], razoavel: [4.01, 4.28], fraco: 4.28 },
+        14: { excelencia: 3.20, mbom: [3.21, 3.67], bom: [3.68, 3.96], razoavel: [3.97, 4.25], fraco: 4.25 },
+        15: { excelencia: 3.11, mbom: [3.12, 3.61], bom: [3.62, 3.91], razoavel: [3.92, 4.22], fraco: 4.22 },
+        16: { excelencia: 3.03, mbom: [3.04, 3.55], bom: [3.56, 3.87], razoavel: [3.88, 4.21], fraco: 4.21 },
+        17: { excelencia: 2.95, mbom: [2.96, 3.49], bom: [3.50, 3.83], razoavel: [3.84, 4.19], fraco: 4.19 },
+      }
+    };
+
+    // Test 3: Potência membros superiores (medicine ball throw 2kg) - cm (higher better)
+    const test3Table = {
+      M: {
+        6: { fraco: 136.2, razoavel: [136.2, 154.9], bom: [155.0, 180.3], mbom: [180.4, 248.9], excelencia: 249.0 },
+        7: { fraco: 154.9, razoavel: [154.9, 175.5], bom: [175.6, 201.3], mbom: [201.4, 261.3], excelencia: 261.4 },
+        8: { fraco: 173.4, razoavel: [173.4, 195.8], bom: [195.9, 223.2], mbom: [223.3, 284.2], excelencia: 284.3 },
+        9: { fraco: 192.2, razoavel: [192.2, 216.7], bom: [216.8, 246.9], mbom: [247.0, 315.2], excelencia: 315.3 },
+        10: { fraco: 209.2, razoavel: [209.2, 235.6], bom: [235.7, 268.7], mbom: [268.8, 345.3], excelencia: 345.4 },
+        11: { fraco: 230.1, razoavel: [230.1, 259.1], bom: [259.2, 295.0], mbom: [295.1, 376.7], excelencia: 376.8 },
+        12: { fraco: 255.2, razoavel: [255.2, 287.6], bom: [287.7, 327.3], mbom: [327.4, 416.1], excelencia: 416.2 },
+        13: { fraco: 295.6, razoavel: [295.6, 333.9], bom: [334.0, 379.9], mbom: [380.0, 479.6], excelencia: 479.7 },
+        14: { fraco: 348.5, razoavel: [348.5, 393.9], bom: [394.0, 446.4], mbom: [446.5, 554.4], excelencia: 554.5 },
+        15: { fraco: 405.1, razoavel: [405.1, 456.1], bom: [456.1, 512.9], mbom: [513.0, 623.4], excelencia: 623.5 },
+        16: { fraco: 448.3, razoavel: [448.3, 501.6], bom: [501.6, 560.0], mbom: [560.1, 670.8], excelencia: 670.9 },
+        17: { fraco: 486.8, razoavel: [486.8, 541.2], bom: [541.2, 600.1], mbom: [600.2, 710.3], excelencia: 710.4 },
+      },
+      F: {
+        6: { fraco: 129.7, razoavel: [129.7, 146.6], bom: [146.7, 167.4], mbom: [167.5, 214.8], excelencia: 214.9 },
+        7: { fraco: 141.7, razoavel: [141.7, 159.9], bom: [160.0, 182.0], mbom: [182.1, 230.4], excelencia: 230.5 },
+        8: { fraco: 156.6, razoavel: [156.6, 176.4], bom: [176.5, 200.3], mbom: [200.4, 252.1], excelencia: 252.2 },
+        9: { fraco: 174.1, razoavel: [174.1, 195.8], bom: [195.9, 222.1], mbom: [222.2, 279.5], excelencia: 279.6 },
+        10: { fraco: 191.9, razoavel: [191.9, 215.5], bom: [215.6, 244.3], mbom: [244.4, 308.0], excelencia: 308.1 },
+        11: { fraco: 214.3, razoavel: [214.3, 240.2], bom: [240.3, 271.8], mbom: [271.9, 341.8], excelencia: 341.9 },
+        12: { fraco: 236.8, razoavel: [236.8, 265.0], bom: [265.1, 298.9], mbom: [299.0, 372.1], excelencia: 372.2 },
+        13: { fraco: 261.3, razoavel: [261.3, 292.1], bom: [292.2, 328.2], mbom: [328.3, 403.4], excelencia: 403.5 },
+        14: { fraco: 283.5, razoavel: [283.5, 316.5], bom: [316.6, 354.4], mbom: [354.5, 431.7], excelencia: 431.8 },
+        15: { fraco: 299.9, razoavel: [299.9, 334.1], bom: [334.2, 373.4], mbom: [373.5, 452.8], excelencia: 452.9 },
+        16: { fraco: 309.7, razoavel: [309.7, 344.6], bom: [344.7, 385.0], mbom: [385.1, 468.0], excelencia: 468.1 },
+        17: { fraco: 318.4, razoavel: [318.4, 353.7], bom: [353.8, 395.5], mbom: [395.6, 484.0], excelencia: 484.1 },
+      }
+    };
+
+    // Test 4: Potência membros inferiores (salto horizontal) - cm (higher better)
+    const test4Table = {
+      M: {
+        6: { fraco: 100.1, razoavel: [100.1, 111.5], bom: [111.6, 125.6], mbom: [125.7, 157.9], excelencia: 158.0 },
+        7: { fraco: 107.5, razoavel: [107.5, 118.9], bom: [119.0, 132.9], mbom: [133.0, 164.1], excelencia: 164.2 },
+        8: { fraco: 114.7, razoavel: [114.7, 126.2], bom: [126.3, 140.1], mbom: [140.2, 170.6], excelencia: 170.7 },
+        9: { fraco: 122.2, razoavel: [122.2, 133.9], bom: [134.0, 147.8], mbom: [147.9, 178.0], excelencia: 178.1 },
+        10: { fraco: 129.6, razoavel: [129.6, 141.5], bom: [141.6, 155.7], mbom: [155.8, 185.8], excelencia: 185.9 },
+        11: { fraco: 136.6, razoavel: [136.6, 148.8], bom: [148.9, 163.2], mbom: [163.3, 193.3], excelencia: 193.4 },
+        12: { fraco: 143.1, razoavel: [143.1, 155.8], bom: [155.9, 170.5], mbom: [170.6, 201.1], excelencia: 201.2 },
+        13: { fraco: 152.6, razoavel: [152.6, 166.1], bom: [166.2, 181.8], mbom: [181.9, 213.8], excelencia: 213.9 },
+        14: { fraco: 164.0, razoavel: [164.0, 178.8], bom: [178.9, 195.7], mbom: [195.8, 229.9], excelencia: 230.0 },
+        15: { fraco: 175.3, razoavel: [175.3, 191.3], bom: [191.4, 209.4], mbom: [209.5, 245.5], excelencia: 245.6 },
+        16: { fraco: 182.6, razoavel: [182.6, 199.3], bom: [199.4, 218.1], mbom: [218.2, 255.2], excelencia: 255.3 },
+        17: { fraco: 188.5, razoavel: [188.5, 205.8], bom: [205.9, 225.0], mbom: [225.1, 262.5], excelencia: 262.6 },
+      },
+      F: {
+        6: { fraco: 88.3, razoavel: [88.3, 99.2], bom: [99.3, 112.8], mbom: [112.9, 143.1], excelencia: 143.2 },
+        7: { fraco: 96.2, razoavel: [96.2, 107.3], bom: [107.4, 120.8], mbom: [120.9, 151.0], excelencia: 151.1 },
+        8: { fraco: 103.5, razoavel: [103.5, 114.6], bom: [114.7, 128.3], mbom: [128.4, 158.4], excelencia: 158.5 },
+        9: { fraco: 110.8, razoavel: [110.8, 122.1], bom: [122.2, 135.9], mbom: [136.0, 166.2], excelencia: 166.3 },
+        10: { fraco: 117.7, razoavel: [117.7, 129.2], bom: [129.3, 143.3], mbom: [143.4, 174.1], excelencia: 174.2 },
+        11: { fraco: 123.9, razoavel: [123.9, 135.8], bom: [135.9, 150.3], mbom: [150.4, 181.7], excelencia: 181.8 },
+        12: { fraco: 128.0, razoavel: [128.0, 140.3], bom: [140.4, 155.3], mbom: [155.4, 187.6], excelencia: 187.7 },
+        13: { fraco: 130.8, razoavel: [130.8, 143.7], bom: [143.8, 159.3], mbom: [159.4, 193.0], excelencia: 193.1 },
+        14: { fraco: 132.0, razoavel: [132.0, 145.6], bom: [145.7, 161.9], mbom: [162.0, 197.3], excelencia: 197.4 },
+        15: { fraco: 131.8, razoavel: [131.8, 146.2], bom: [146.3, 163.5], mbom: [163.6, 200.7], excelencia: 200.8 },
+        16: { fraco: 131.2, razoavel: [131.2, 146.2], bom: [146.3, 164.3], mbom: [164.4, 203.2], excelencia: 203.3 },
+        17: { fraco: 130.5, razoavel: [130.5, 146.2], bom: [146.3, 165.1], mbom: [165.2, 205.6], excelencia: 205.7 },
+      }
+    };
+
+    // Test 5: Agilidade (4x4 metros) - segundos (lower better)
+    const test5Table = {
+      M: {
+        6: { excelencia: 6.20, mbom: [6.21, 7.10], bom: [7.11, 7.60], razoavel: [7.61, 8.07], fraco: 8.07 },
+        7: { excelencia: 6.01, mbom: [6.02, 6.90], bom: [6.91, 7.39], razoavel: [7.40, 7.85], fraco: 7.85 },
+        8: { excelencia: 5.85, mbom: [5.86, 6.71], bom: [6.72, 7.20], razoavel: [7.21, 7.65], fraco: 7.65 },
+        9: { excelencia: 5.69, mbom: [5.70, 6.53], bom: [6.54, 7.00], razoavel: [7.01, 7.45], fraco: 7.45 },
+        10: { excelencia: 5.54, mbom: [5.55, 6.35], bom: [6.36, 6.81], razoavel: [6.82, 7.25], fraco: 7.25 },
+        11: { excelencia: 5.37, mbom: [5.38, 6.15], bom: [6.16, 6.60], razoavel: [6.61, 7.02], fraco: 7.02 },
+        12: { excelencia: 5.22, mbom: [5.23, 5.98], bom: [5.99, 6.41], razoavel: [6.42, 6.82], fraco: 6.82 },
+        13: { excelencia: 5.08, mbom: [5.09, 5.80], bom: [5.81, 6.22], razoavel: [6.23, 6.62], fraco: 6.62 },
+        14: { excelencia: 4.93, mbom: [4.94, 5.62], bom: [5.63, 6.03], razoavel: [6.04, 6.42], fraco: 6.42 },
+        15: { excelencia: 4.76, mbom: [4.77, 5.42], bom: [5.43, 5.81], razoavel: [5.82, 6.19], fraco: 6.19 },
+        16: { excelencia: 4.62, mbom: [4.63, 5.24], bom: [5.25, 5.62], razoavel: [5.63, 5.99], fraco: 5.99 },
+        17: { excelencia: 4.47, mbom: [4.48, 5.07], bom: [5.08, 5.43], razoavel: [5.44, 5.79], fraco: 5.79 },
+      },
+      F: {
+        6: { excelencia: 6.67, mbom: [6.68, 7.67], bom: [7.66, 8.26], razoavel: [8.27, 8.85], fraco: 8.85 },
+        7: { excelencia: 6.32, mbom: [6.33, 7.35], bom: [7.36, 7.93], razoavel: [7.94, 8.47], fraco: 8.47 },
+        8: { excelencia: 6.09, mbom: [6.10, 7.09], bom: [7.10, 7.64], razoavel: [7.65, 8.15], fraco: 8.15 },
+        9: { excelencia: 5.97, mbom: [5.98, 6.87], bom: [6.88, 7.37], razoavel: [7.38, 7.85], fraco: 7.85 },
+        10: { excelencia: 5.81, mbom: [5.82, 6.66], bom: [6.67, 7.14], razoavel: [7.15, 7.60], fraco: 7.60 },
+        11: { excelencia: 5.67, mbom: [5.68, 6.49], bom: [6.50, 6.95], razoavel: [6.96, 7.39], fraco: 7.39 },
+        12: { excelencia: 5.61, mbom: [5.62, 6.37], bom: [6.38, 6.82], razoavel: [6.83, 7.27], fraco: 7.27 },
+        13: { excelencia: 5.47, mbom: [5.48, 6.25], bom: [6.26, 6.70], razoavel: [6.71, 7.15], fraco: 7.15 },
+        14: { excelencia: 5.32, mbom: [5.33, 6.11], bom: [6.12, 6.58], razoavel: [6.59, 7.05], fraco: 7.05 },
+        15: { excelencia: 5.21, mbom: [5.22, 6.00], bom: [6.01, 6.48], razoavel: [6.49, 6.97], fraco: 6.97 },
+        16: { excelencia: 5.12, mbom: [5.13, 5.92], bom: [5.93, 6.42], razoavel: [6.43, 6.92], fraco: 6.92 },
+        17: { excelencia: 5.02, mbom: [5.03, 5.84], bom: [5.85, 6.36], razoavel: [6.37, 6.88], fraco: 6.88 },
+      }
+    };
+
+    // Test 6: Flexibilidade (sentar e alcançar) - cm (higher better)
+    const test6Table = {
+      M: {
+        6: { fraco: 34.3, razoavel: [34.3, 41.2], bom: [41.3, 50.3], mbom: [50.4, 73.9], excelencia: 74.0 },
+        7: { fraco: 33.3, razoavel: [33.3, 39.6], bom: [39.7, 47.9], mbom: [48.0, 68.4], excelencia: 68.5 },
+        8: { fraco: 32.3, razoavel: [32.3, 38.3], bom: [38.4, 45.9], mbom: [46.0, 63.9], excelencia: 64.0 },
+        9: { fraco: 31.3, razoavel: [31.3, 37.1], bom: [37.2, 44.5], mbom: [44.6, 61.4], excelencia: 61.5 },
+        10: { fraco: 30.4, razoavel: [30.4, 36.4], bom: [36.5, 43.8], mbom: [43.9, 60.7], excelencia: 60.8 },
+        11: { fraco: 29.8, razoavel: [29.8, 35.6], bom: [35.7, 42.9], mbom: [43.0, 59.2], excelencia: 59.3 },
+        12: { fraco: 29.4, razoavel: [29.4, 35.1], bom: [35.2, 42.1], mbom: [42.2, 57.8], excelencia: 57.9 },
+        13: { fraco: 29.1, razoavel: [29.1, 35.2], bom: [35.3, 42.8], mbom: [42.9, 60.5], excelencia: 60.6 },
+        14: { fraco: 28.7, razoavel: [28.7, 35.6], bom: [35.7, 44.7], mbom: [44.8, 67.1], excelencia: 67.2 },
+        15: { fraco: 28.4, razoavel: [28.4, 36.3], bom: [36.4, 46.9], mbom: [47.0, 73.7], excelencia: 73.8 },
+        16: { fraco: 28.4, razoavel: [28.4, 36.7], bom: [36.8, 48.0], mbom: [48.1, 76.5], excelencia: 76.6 },
+        17: { fraco: 28.7, razoavel: [28.7, 36.8], bom: [36.9, 47.9], mbom: [48.0, 76.1], excelencia: 76.2 },
+      },
+      F: {
+        6: { fraco: 37.0, razoavel: [37.0, 43.8], bom: [43.9, 52.5], mbom: [52.6, 73.4], excelencia: 73.4 },
+        7: { fraco: 35.3, razoavel: [35.3, 41.8], bom: [41.9, 49.9], mbom: [50.0, 69.1], excelencia: 69.1 },
+        8: { fraco: 33.8, razoavel: [33.8, 40.0], bom: [40.1, 47.8], mbom: [47.9, 65.7], excelencia: 65.7 },
+        9: { fraco: 32.4, razoavel: [32.4, 38.6], bom: [38.7, 46.2], mbom: [46.3, 63.6], excelencia: 63.6 },
+        10: { fraco: 31.3, razoavel: [31.3, 37.5], bom: [37.6, 45.3], mbom: [45.4, 62.6], excelencia: 62.6 },
+        11: { fraco: 30.6, razoavel: [30.6, 36.7], bom: [36.8, 44.2], mbom: [44.3, 61.0], excelencia: 61.0 },
+        12: { fraco: 30.4, razoavel: [30.4, 36.3], bom: [36.4, 43.6], mbom: [43.7, 60.1], excelencia: 60.1 },
+        13: { fraco: 30.3, razoavel: [30.3, 36.6], bom: [36.7, 44.5], mbom: [44.6, 62.9], excelencia: 62.9 },
+        14: { fraco: 30.1, razoavel: [30.1, 37.2], bom: [37.3, 46.5], mbom: [46.6, 69.5], excelencia: 69.5 },
+        15: { fraco: 29.6, razoavel: [29.6, 37.8], bom: [37.9, 48.8], mbom: [48.9, 77.1], excelencia: 77.1 },
+        16: { fraco: 29.2, razoavel: [29.2, 37.8], bom: [37.9, 49.5], mbom: [49.6, 80.1], excelencia: 80.1 },
+        17: { fraco: 28.9, razoavel: [28.9, 37.4], bom: [37.5, 48.9], mbom: [49.0, 79.0], excelencia: 79.0 },
+      }
+    };
+
+    // Test 7: Resistência muscular localizada (abdominais em 1 minuto) - repetições (higher better)
+    const test7Table = {
+      M: {
+        6: { fraco: 18, razoavel: [18, 22], bom: [23, 27], mbom: [28, 38], excelencia: 39 },
+        7: { fraco: 20, razoavel: [20, 25], bom: [26, 30], mbom: [31, 42], excelencia: 43 },
+        8: { fraco: 23, razoavel: [23, 27], bom: [28, 33], mbom: [34, 45], excelencia: 46 },
+        9: { fraco: 25, razoavel: [25, 29], bom: [30, 35], mbom: [36, 47], excelencia: 48 },
+        10: { fraco: 26, razoavel: [26, 31], bom: [32, 36], mbom: [37, 48], excelencia: 49 },
+        11: { fraco: 27, razoavel: [27, 32], bom: [33, 38], mbom: [39, 49], excelencia: 50 },
+        12: { fraco: 29, razoavel: [29, 34], bom: [35, 39], mbom: [40, 51], excelencia: 52 },
+        13: { fraco: 30, razoavel: [30, 35], bom: [36, 41], mbom: [42, 53], excelencia: 54 },
+        14: { fraco: 32, razoavel: [32, 37], bom: [38, 43], mbom: [44, 56], excelencia: 57 },
+        15: { fraco: 34, razoavel: [34, 39], bom: [40, 46], mbom: [47, 59], excelencia: 60 },
+        16: { fraco: 35, razoavel: [35, 41], bom: [42, 47], mbom: [48, 61], excelencia: 62 },
+        17: { fraco: 36, razoavel: [36, 42], bom: [43, 48], mbom: [49, 62], excelencia: 63 },
+      },
+      F: {
+        6: { fraco: 17, razoavel: [17, 21], bom: [22, 26], mbom: [27, 37], excelencia: 37 },
+        7: { fraco: 19, razoavel: [19, 23], bom: [24, 29], mbom: [30, 40], excelencia: 40 },
+        8: { fraco: 20, razoavel: [20, 25], bom: [26, 31], mbom: [32, 43], excelencia: 43 },
+        9: { fraco: 21, razoavel: [21, 26], bom: [27, 32], mbom: [33, 45], excelencia: 45 },
+        10: { fraco: 22, razoavel: [22, 27], bom: [28, 33], mbom: [34, 45], excelencia: 45 },
+        11: { fraco: 23, razoavel: [23, 28], bom: [29, 33], mbom: [34, 46], excelencia: 46 },
+        12: { fraco: 24, razoavel: [24, 29], bom: [30, 35], mbom: [36, 48], excelencia: 48 },
+        13: { fraco: 24, razoavel: [24, 29], bom: [30, 35], mbom: [36, 49], excelencia: 49 },
+        14: { fraco: 24, razoavel: [24, 29], bom: [30, 35], mbom: [36, 49], excelencia: 49 },
+        15: { fraco: 23, razoavel: [23, 29], bom: [30, 35], mbom: [36, 48], excelencia: 48 },
+        16: { fraco: 23, razoavel: [23, 29], bom: [30, 35], mbom: [36, 48], excelencia: 48 },
+        17: { fraco: 23, razoavel: [23, 29], bom: [30, 35], mbom: [36, 48], excelencia: 48 },
+      }
+    };
+
+    // Map performance to CSS class
+    const performanceClassMap = {
+      'fraco': 'performance-fraco',
+      'razoavel': 'performance-razoavel',
+      'bom': 'performance-bom',
+      'm-bom': 'performance-mbom',
+      'excelencia': 'performance-excelencia'
+    };
+
+    // Classify a single test result based on sex, age, value, and table
+    function classifyTest(sex, age, value, table, higherBetter = true) {
+      if (!table[sex] || !table[sex][age]) return 'fraco';
+      const ranges = table[sex][age];
+      if (higherBetter) {
+        return classifyHigherBetter(value, ranges);
+      } else {
+        return classifyLowerBetter(value, ranges);
+      }
+    }
+
+    // Store students data
+    const students = [];
+
+    // Render students table
+    function renderStudents() {
+      const tbody = document.querySelector('#studentsTable tbody');
+      tbody.innerHTML = '';
+      students.forEach(student => {
+        const tr = document.createElement('tr');
+
+        // Basic info
+        tr.appendChild(createCell(student.name));
+        tr.appendChild(createCell(student.id));
+        tr.appendChild(createCell(student.sex === 'M' ? 'Masculino' : 'Feminino'));
+        tr.appendChild(createCell(student.age));
+        tr.appendChild(createCell(student.modalities.join(', ')));
+
+        // Tests and classifications
+        for (let i = 1; i <= 7; i++) {
+          const testValue = student['teste' + i];
+          const classification = student['classificacao' + i];
+          tr.appendChild(createCell(testValue));
+          const classCell = createCell(classification);
+          classCell.classList.add(performanceClassMap[classification]);
+          tr.appendChild(classCell);
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Helper to create a table cell
+    function createCell(text) {
+      const td = document.createElement('td');
+      td.textContent = text;
+      return td;
+    }
+
+    // Form submission handler
+    document.getElementById('studentForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const name = form.name.value.trim();
+      const id = form.id.value.trim();
+      const sex = form.sex.value;
+      const age = parseInt(form.age.value, 10);
+      const modalities = Array.from(form.modalities.selectedOptions).map(opt => opt.text);
+
+      // Get test results
+      const teste1 = parseFloat(form.teste1.value);
+      const teste2 = parseFloat(form.teste2.value);
+      const teste3 = parseFloat(form.teste3.value);
+      const teste4 = parseFloat(form.teste4.value);
+      const teste5 = parseFloat(form.teste5.value);
+      const teste6 = parseFloat(form.teste6.value);
+      const teste7 = parseInt(form.teste7.value, 10);
+
+      // Classify each test
+      const classificacao1 = classifyTest(sex, age, teste1, test1Table, true);
+      const classificacao2 = classifyTest(sex, age, teste2, test2Table, false);
+      const classificacao3 = classifyTest(sex, age, teste3, test3Table, true);
+      const classificacao4 = classifyTest(sex, age, teste4, test4Table, true);
+      const classificacao5 = classifyTest(sex, age, teste5, test5Table, false);
+      const classificacao6 = classifyTest(sex, age, teste6, test6Table, true);
+      const classificacao7 = classifyTest(sex, age, teste7, test7Table, true);
+
+      // Add student to array
+      students.push({
+        name, id, sex, age, modalities,
+        teste1, classificacao1,
+        teste2, classificacao2,
+        teste3, classificacao3,
+        teste4, classificacao4,
+        teste5, classificacao5,
+        teste6, classificacao6,
+        teste7, classificacao7
+      });
+
+      // Sort by performance automatically (best to worst)
+      const scoreMap = { 'fraco': 1, 'razoavel': 2, 'bom': 3, 'm-bom': 4, 'excelencia': 5 };
+      students.sort((a, b) => {
+        const aScore = (scoreMap[a.classificacao1] + scoreMap[a.classificacao2] + scoreMap[a.classificacao3] + scoreMap[a.classificacao4] + scoreMap[a.classificacao5] + scoreMap[a.classificacao6] + scoreMap[a.classificacao7]) / 7;
+        const bScore = (scoreMap[b.classificacao1] + scoreMap[b.classificacao2] + scoreMap[b.classificacao3] + scoreMap[b.classificacao4] + scoreMap[b.classificacao5] + scoreMap[b.classificacao6] + scoreMap[b.classificacao7]) / 7;
+        return bScore - aScore;
+      });
+
+      // Render updated table
+      renderStudents();
+
+      // Reset form
+      form.reset();
+      form.sex.selectedIndex = 0;
+      form.modalities.selectedIndex = -1;
+    });
+
+    // Filtering by modality and sorting by performance (best to worst)
+    document.getElementById('filterBy').addEventListener('change', function() {
+      const filterValue = this.value.toLowerCase();
+      const scoreMap = { 'fraco': 1, 'razoavel': 2, 'bom': 3, 'm-bom': 4, 'excelencia': 5 };
+      let filteredStudents = [];
+      if (filterValue === 'all') {
+        filteredStudents = students.slice();
+      } else {
+        filteredStudents = students.filter(student => student.modalities.some(mod => mod.toLowerCase() === filterValue));
+      }
+      filteredStudents.sort((a, b) => {
+        const aScore = (scoreMap[a.classificacao1] + scoreMap[a.classificacao2] + scoreMap[a.classificacao3] + scoreMap[a.classificacao4] + scoreMap[a.classificacao5] + scoreMap[a.classificacao6] + scoreMap[a.classificacao7]) / 7;
+        const bScore = (scoreMap[b.classificacao1] + scoreMap[b.classificacao2] + scoreMap[b.classificacao3] + scoreMap[b.classificacao4] + scoreMap[b.classificacao5] + scoreMap[b.classificacao6] + scoreMap[b.classificacao7]) / 7;
+        return bScore - aScore; // descending (best first)
+      });
+      renderFilteredStudents(filteredStudents);
+    });
+
+    // Render filtered students table
+    function renderFilteredStudents(filteredStudents) {
+      const tbody = document.querySelector('#studentsTable tbody');
+      tbody.innerHTML = '';
+      filteredStudents.forEach(student => {
+        const tr = document.createElement('tr');
+
+        // Basic info
+        tr.appendChild(createCell(student.name));
+        tr.appendChild(createCell(student.id));
+        tr.appendChild(createCell(student.sex === 'M' ? 'Masculino' : 'Feminino'));
+        tr.appendChild(createCell(student.age));
+        tr.appendChild(createCell(student.modalities.join(', ')));
+
+        // Tests and classifications
+        for (let i = 1; i <= 7; i++) {
+          const testValue = student['teste' + i];
+          const classification = student['classificacao' + i];
+          tr.appendChild(createCell(testValue));
+          const classCell = createCell(classification);
+          classCell.classList.add(performanceClassMap[classification]);
+          tr.appendChild(classCell);
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
